@@ -29,16 +29,22 @@ async function setCache() {
 const cors = require('cors');
 
 /** Basic CORS - just allow all origins */
-// app.use(cors());
+ //app.use(cors());
 
-/** Simple way - checks our cache for the origin and if it's there, allows CORS */
-// app.use(cors({ origin: allowedOrigins.keys() }));
+ /** Simple way - Feed our keys as an array when the preflight check comes in.  The CORS middleware will handle the rest. */
+ /*let corsDynamic = {
+    origin: function (origin, callback) {
+        callback(null, allowedOrigins.keys());
+    }
+  }
+ app.use(cors(corsDynamic)); */
 
 /** Complex way - checks our cache for the origin using a customizable function
  *  If the origin exists and has a matching API key - allow CORS.
  *  This logic can be complex or simple, but either way you want it to fast!
  */
-const corsOptions = function (req, callback) {
+
+const corsAsync = function (req, callback) {
     let corsOptions = { origin: false };
     const origin = req.header('Origin')
     const originExists = allowedOrigins.has(origin);
@@ -49,7 +55,8 @@ const corsOptions = function (req, callback) {
 
     callback(null, corsOptions);
 }
-app.use(cors(corsOptions));
+app.use(cors(corsAsync));
+
 /** End CORS stuff */
 
 /** Routes */
@@ -61,6 +68,7 @@ app.get('/api/hello', function (req, res) {
 setCache().then(() => {
     console.log('Origins allowed: ');
     console.dir(allowedOrigins.keys());
+
     app.listen(3000, function () {
         console.info('CORS app listening on port 3000!');
     });

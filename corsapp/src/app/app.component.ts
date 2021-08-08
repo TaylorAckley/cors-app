@@ -20,9 +20,11 @@ export class AppComponent implements OnInit {
 
   }
 
+  // ?apiKey=f50b857e67db492d95fcb9da4697fd2d
+
   makeRequest() {
     this.requested = false;
-    this.httpClient.get(`http://localhost:3000/api/hello?apiKey=f50b857e67db492d95fcb9da4697fd2d`).subscribe((res: any) => {
+    this.httpClient.get('http://localhost:3000/api/hello?apiKey=f50b857e67db492d95fcb9da4697fd2d').subscribe((res: any) => {
       this.resMessage = res.message;
       this.requested = true;
     }, (err: HttpErrorResponse) => {
