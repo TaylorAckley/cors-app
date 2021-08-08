@@ -1,0 +1,20 @@
+<main class="container d-flex justify-content-center align-content-middle flex-column p-5">
+  <h1 class="text-center">Cors App</h1>
+
+  <div class="mt-3 mb-3">
+    <button class="btn btn-lg btn-primary" (click)="makeRequest()">Make Request</button>
+  </div>
+  <div *ngIf="requested && resMessage">
+    <div class="alert alert-success">Success! {{resMessage}}</div>
+  </div>
+
+  <div #error *ngIf="requested && errMessage && !resMessage">
+    <div class="alert alert-danger">
+      <p>
+        Oh, no!
+        <br>
+        {{errMessage}}
+      </p>
+    </div>
+  </div>
+</main>
